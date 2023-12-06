@@ -8,37 +8,38 @@
 
 import cv2 as cv
 
-
-#========= Function to change width-height =========#
-def rescaleFrame(frame , scale = 0.20):
-    # width & height are int
-    width = int(frame.shape[1]*scale) # 1 is width
-    height = int(frame.shape[0]*scale) # 2 is height
-
-
-    return cv.resize(frame, (width,height), interpolation=cv.INTER_AREA)
-
-
 #========= Read Images =========#
 image = cv.imread('Photos/cat_large.jpg')
 
+#========= Read Videos =========#
+video = cv.VideoCapture('Videos/dog.mp4')
+
+#========= Function to resize =========# Images, Videos and Live stream
+def rescaleFrame(frame , scale = 0.20): 
+    width = int(frame.shape[1]*scale)   # 1 is width # width & height are int
+    height = int(frame.shape[0]*scale)  # 2 is height
+
+    return cv.resize(frame, (width,height), interpolation=cv.INTER_AREA)
+
 image_resized = rescaleFrame(image)
+#cv.imshow('Cat', image)
 cv.imshow('Cat', image_resized)
 cv.waitKey(0)
 
-#========= Read Videos =========#
-video = cv.VideoCapture('Videos/dog.mp4')
+
+#========= Function to change resolution =========# Only live stream video
+def chagneRes(width,height):
+    video.set(3,width)
+    video.set(4,height)
 
 while True:
     isTrue, frame = video.read()
     frame_resized = rescaleFrame(frame)
 
-
     #cv.imshow('Video', frame)
     cv.imshow('Video', frame_resized)
 
-    #break when letter 'd' is pressed
-    if cv.waitKey(20) & 0xFF==ord('d'):           
+    if cv.waitKey(20) & 0xFF==ord('d'): #break when letter 'd' is pressed      
         break
 
 video.release()
